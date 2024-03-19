@@ -1,6 +1,6 @@
-import "./Main.css";
+import "./MainHome.css";
 
-const Main = () => {
+const MainHome = () => {
   return (
     <div className="landing">
       <div className="landing__content">
@@ -11,4 +11,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainHome;
