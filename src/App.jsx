@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LayoutLogin from "./components/LayoutLogin";
 import Home from "./pages/Home";
+import BuddyWriter from "./pages/BuddyWriter";
 import "./App.css";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="login" element={<LayoutLogin />} />
+        <Route path="Buddy Writer" element={<BuddyWriter />} />
       </Routes>
     </BrowserRouter>
   );
