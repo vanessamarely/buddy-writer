@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import "./Header.css";
 
@@ -10,9 +10,9 @@ const Header = () => {
         <div className="meat"></div>
         <div className="bottom-bun"></div>
       </div>
-      <a className="navbar-logo" href="#home">
+      <Link className="navbar-logo" to="/">
         <img src="buddy-writer.svg" alt="Buddy Writer" />
-      </a>
+      </Link>
       <nav className="navbar">
         <ul className="navbar-options">
           <NavLink className="navbar-options__option" to="/">

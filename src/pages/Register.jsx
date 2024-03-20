@@ -2,46 +2,50 @@ import React, { useState } from "react";
 
 import Header from "./../components/Header/Header";
 import Footer from "./../components/Footer/Footer";
-import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
-import "./Login.css";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+import "./Register.css";
+
+const Register = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [notice, setNotice] = useState("");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const loginWithUsernameAndPassword = async (e) => {
-    e.preventDefault();
-    console.log("email", email);
-    console.log("pas", password);
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/home");
-    } catch(error) {
-      console.log("error", error);
-      setNotice("You entered a wrong username or password.");
-    }
-  };
-
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
+  const signupWithUsernameAndPassword = async (e) => {
+    e.preventDefault();
+    if (password === confirmPassword) {
+      try {
+        console.log("email", email);
+        console.log("pas", password);
+        await createUserWithEmailAndPassword(auth, email, password);
+        navigate("/");
+      } catch {
+        setNotice("Sorry, something went wrong. Please try again.");
+      }
+    } else {
+      setNotice("Passwords don't match. Please try again.");
+    }
+  };
 
   return (
     <div className="container">
       <Header />
       <div className="landing">
         <div className="landing__content">
-          <h1>Login</h1>
+          <h1>Register</h1>
           <form>
             {"" !== notice && (
               <div className="alert alert-warning" role="alert">
@@ -56,8 +60,6 @@ const Login = () => {
                 placeholder="Please add your email"
                 value={email}
                 onChange={(event) => handleEmailChange(event)}
-                autoComplete="on"
-                required
               />
             </div>
 
@@ -68,23 +70,26 @@ const Login = () => {
                 placeholder="Please add your password"
                 value={password}
                 onChange={(event) => handlePasswordChange(event)}
-                autoComplete="on"
-                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword">confirmPassword</label>
+              <input
+                type="password"
+                placeholder="Confirm yourpassword"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
               />
             </div>
 
             <button
-              onClick={(e) => loginWithUsernameAndPassword(e)}
               className="primary-button"
               type="submit"
+              onClick={(e) => signupWithUsernameAndPassword(e)}
             >
-              Sign In
+              Register
             </button>
-            <div>
-              <Link className="button-secondary" to="/register">
-                Register
-              </Link>
-            </div>
           </form>
         </div>
       </div>
@@ -93,4 +98,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -1,0 +1,42 @@
+.top-bar__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  order: 1;
+  width: 100%;
+}
+
+.top-bar__search {
+  width: 70%;
+}
+
+.search {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+.top-bar__user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  order: 2;
+}
+
+.logout-button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #233C77;
+  color: white;
+  cursor: pointer;
+}
