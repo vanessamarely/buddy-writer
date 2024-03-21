@@ -13,10 +13,24 @@ const GenerateDocumentation = () => {
 
   const fetchData = async () => {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    const prompt = `Write technical documentation for a software project, based on ${output}. The documentation should be comprehensive and easy to understand, and it should cover all aspects of the project, including: the  purpose of project and goals, the  architecture project and design, the  implementation details, testing of the project and deployment procedures, maintenance of the project  and support plans. The documentation should be written in a clear and concise style, and it should use terminology that is appropriate for the target audience. The documentation should also be well-organized and easy to navigate. The following information may be helpful in generating the documentation: the source code, deployment scripts, user manual of the project and technical specifications.`;
+    const prompt = `Write technical documentation for a software project, based on ${output}. 
+    The documentation should be comprehensive and easy to understand, 
+    and it should cover all aspects of the project, 
+    including: the  purpose of project and goals, 
+    the  architecture project and design, 
+    the  implementation details, 
+    testing of the project and deployment procedures, 
+    maintenance of the project  and support plans. 
+    The documentation should be written in a clear and concise style, 
+    and it should use terminology that is appropriate for the target audience. 
+    The documentation should also be well-organized and easy to navigate. 
+    The following information may be helpful in generating the documentation: 
+    the source code, deployment scripts, user manual of the project and technical specifications.
+    `;
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
+
     setApiData(text);
     setLoading(false);
   };
@@ -31,16 +45,32 @@ const GenerateDocumentation = () => {
     setOutput(event.target.value);
   };
 
+  const handleDownload = () => {
+    
+  
+    console.log('hole ', apiData);
+
+    const file = new Blob([apiData], { type: "text/plain" });
+    const a = document.createElement("a");
+    const url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = "documentation.txt";
+    document.body.appendChild(a);
+    a.click();
+    
+    
+  };
+
   return (
     <div className="generate-documentation">
       <h2>Generate Documentation</h2>
       <p>Welcome! we are going to create together the documentation</p>
       <div className="generate-documentation__container-buttons">
-        <button className="generate-documentation__button">
+        <button type="button" className="generate-documentation__button">
           <img src="upload-solid.svg" alt="" />
           Update File
         </button>
-        <button className="generate-documentation__button">
+        <button type="button" className="generate-documentation__button">
           <img src="link-solid.svg" alt="" />
           Connect with your repository
         </button>
@@ -61,12 +91,17 @@ const GenerateDocumentation = () => {
           >
             Generate
           </button>
+         
           <div className="generate-documentation__container-buttons">
-            <button className="generate-documentation__button">
+            <button
+              onClick={handleDownload}
+              type="button"
+              className="generate-documentation__button"
+            >
               <img src="floppy-disk-solid.svg" alt="" />
               Save to User Manuals
             </button>
-            <button className="generate-documentation__button">
+            <button type="button" className="generate-documentation__button">
               <img src="file-export-solid.svg" alt="" />
               Export
             </button>
@@ -74,6 +109,7 @@ const GenerateDocumentation = () => {
         </div>
         <div className="model-response">
           {!loading && <p className="text-align-left">{apiData}</p>}
+
           {loading && <p>Loading...</p>}
         </div>
       </div>

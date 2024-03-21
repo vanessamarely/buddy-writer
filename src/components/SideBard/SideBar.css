@@ -45,8 +45,11 @@
     text-decoration: none;
 }
 
+.list-options-item {
+    padding: 1em;
+    width: 100%;
+}
+
 .list-options-item:active, .list-options-item:hover {
     background-color: #233C77;
-    width: 100%;
-    padding: 1em;
 }

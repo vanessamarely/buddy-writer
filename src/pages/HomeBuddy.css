@@ -13,6 +13,7 @@
 .box .right-box {
   width: 70%;
   order: 2;
+  height: 100vh;
 }
 .right-box .home-box {
   height: 70vh;

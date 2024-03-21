@@ -1,6 +1,6 @@
 .generate-documentation {
   height: 100%;
-  padding: 2rem;
+  padding: 0 2rem;
 }
 h2,
 p {
@@ -39,7 +39,7 @@ img {
 
 .model-response {
   overflow-y: scroll;
-  height: 30vh;
+  height: 25vh;
   padding: 1rem;
   margin: 1rem 0;
 }
