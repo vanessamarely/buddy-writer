@@ -1,11 +1,11 @@
 header {
-  height: 15vh;
+  height: 21vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  margin: 10px;
+  background-color: #fff;
 }
 
 .menu-hamburger {
@@ -20,7 +20,7 @@ header {
 }
 
 .navbar-logo img {
-  width: 250px;
+  width: 200px;
 }
 
 .navbar {
@@ -99,8 +99,8 @@ header {
     z-index: 5;
   }
   .menu-hamburger div {
-    width: 3em;
-    height: 7px;
+    width: 2em;
+    height: 4px;
     border-radius: 3px;
     background-color: #233c77;
     margin-top: 8px;

@@ -48,7 +48,7 @@ const Login = () => {
                 {notice}
               </div>
             )}
-            <div>
+            <div className="landing__content-input">
               <label htmlFor="email">username</label>
               <input
                 type="email"
@@ -61,7 +61,7 @@ const Login = () => {
               />
             </div>
 
-            <div>
+            <div className="landing__content-input">
               <label htmlFor="password">password</label>
               <input
                 type="password"
