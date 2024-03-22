@@ -1,38 +1,43 @@
 import "./GenerateDocumentation.css";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { promst } from "../../utils/prompts";
 
 const apiKey = import.meta.env.VITE_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const GenerateDocumentation = () => {
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-  const [output, setOutput] = useState("");
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [apiData, setApiData] = useState([]);
+  const [selectedDocumentType, setSelectedDocumentType] = useState("");
+  const [selectPromptMessage, setSelectPromptMessage] = useState(
+    promst[0]?.message
+  );
+  const [message, setMessage] = useState("");
+  const [savedtext, setSavedText] = useState("");
 
   const fetchData = async () => {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    const prompt = `Write technical documentation for a software project, based on ${output}. 
-    The documentation should be comprehensive and easy to understand, 
-    and it should cover all aspects of the project, 
-    including: the  purpose of project and goals, 
-    the  architecture project and design, 
-    the  implementation details, 
-    testing of the project and deployment procedures, 
-    maintenance of the project  and support plans. 
-    The documentation should be written in a clear and concise style, 
-    and it should use terminology that is appropriate for the target audience. 
-    The documentation should also be well-organized and easy to navigate. 
-    The following information may be helpful in generating the documentation: 
-    the source code, deployment scripts, user manual of the project and technical specifications.
-    `;
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    if (!selectedDocumentType) {
+      setMessage("Please select a document type");
+    } else {
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const prompt = `
+      Based on ${selectedDocumentType}. 
+      Includind the following information: ${selectPromptMessage}.
+      Could you please create a document that includes the following request: ${input}`;
 
-    setApiData(text);
-    setLoading(false);
+      console.log(prompt);
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      console.log(response);
+      const text = response.text() || "No response";
+
+      //setApiData(text.replace(/\n/g, "<br />"));
+      setApiData(text.replace(/\n/g, "<br />"));
+      setSavedText(text);
+      setLoading(false);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -42,23 +47,44 @@ const GenerateDocumentation = () => {
   };
 
   const handleTextChange = (event) => {
-    setOutput(event.target.value);
+    setInput(event.target.value);
   };
 
-  const handleDownload = () => {
-    
-  
-    console.log('hole ', apiData);
-
-    const file = new Blob([apiData], { type: "text/plain" });
+  const handleExport = () => {
+    const file = new Blob([savedtext], { type: "text/plain" });
     const a = document.createElement("a");
     const url = URL.createObjectURL(file);
     a.href = url;
     a.download = "documentation.txt";
     document.body.appendChild(a);
     a.click();
-    
-    
+  };
+
+  const handleDocumentType = (event) => {
+    console.log(event.target.value);
+    setSelectedDocumentType(event.target.value);
+  };
+
+  // const formatResponse = (text) => {
+  //   //text = text.replace(/### (.*)/g, "<h3>$1</h3>");
+  //   console.log(text);
+  //   return text.replace(/\n/g, "<br />");
+  // };
+
+  useEffect(() => {
+    {
+      if (selectedDocumentType !== "") {
+        Object.keys(promst).map((key) => {
+          if (promst[key]?.message === event.target.value) {
+            setSelectPromptMessage(promst[key]?.prompt);
+          }
+        });
+      }
+    }
+  }, [selectedDocumentType, selectPromptMessage]);
+
+  const handleSave = () => {
+    setMessage("Saved to User Manuals");
   };
 
   return (
@@ -74,6 +100,24 @@ const GenerateDocumentation = () => {
           <img src="link-solid.svg" alt="" />
           Connect with your repository
         </button>
+      </div>
+      <div className="generate-documentation_container">
+        <label htmlFor="documentType">Document Type</label>
+        <select
+          name="documentType"
+          id="documentType"
+          className="generate-documentation_select"
+          onChange={handleDocumentType}
+        >
+          <option value="">Selected a Document Type</option>
+          {Object.keys(promst).map((key) => {
+            return (
+              <option key={promst[key]?.id} value={promst[key]?.message}>
+                {promst[key]?.name}
+              </option>
+            );
+          })}
+        </select>
       </div>
       <div className="generate-documentation__container-textarea">
         <textarea
@@ -91,26 +135,43 @@ const GenerateDocumentation = () => {
           >
             Generate
           </button>
-         
+
           <div className="generate-documentation__container-buttons">
             <button
-              onClick={handleDownload}
+              onClick={handleSave}
               type="button"
               className="generate-documentation__button"
             >
               <img src="floppy-disk-solid.svg" alt="" />
               Save to User Manuals
             </button>
-            <button type="button" className="generate-documentation__button">
+            <button
+              onClick={handleExport}
+              type="button"
+              className="generate-documentation__button"
+            >
               <img src="file-export-solid.svg" alt="" />
               Export
             </button>
           </div>
         </div>
         <div className="model-response">
-          {!loading && <p className="text-align-left">{apiData}</p>}
-
+          {!loading && (
+            <>
+              <div
+                className="text-align-left"
+                dangerouslySetInnerHTML={{
+                  __html: apiData,
+                }}
+              />
+            </>
+          )}
           {loading && <p>Loading...</p>}
+        </div>
+        <div className="generate-documentation__message_container">
+          {message && (
+            <p className="generate-documentation__message">{message}</p>
+          )}
         </div>
       </div>
     </div>

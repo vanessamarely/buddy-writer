@@ -11,10 +11,12 @@
 }
 
 .box .right-box {
-  width: 70%;
+  width: 100%;
   order: 2;
   height: 100vh;
+  overflow-y: auto;
 }
+
 .right-box .home-box {
   height: 70vh;
   padding: 2em;

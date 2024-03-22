@@ -11,10 +11,11 @@
 }
 
 .box .right-box {
-  width: 70%;
+  width: 100%;
   order: 2;
   height: 100vh;
   background-color: #fff;
+  overflow-y: auto;
 }
 
 .right-box .generate-documentation {
