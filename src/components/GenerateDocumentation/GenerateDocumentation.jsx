@@ -1,5 +1,9 @@
 import "./GenerateDocumentation.css";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import {
+  GoogleGenerativeAI,
+  HarmBlockThreshold,
+  HarmCategory,
+} from "@google/generative-ai";
 import { useEffect, useState } from "react";
 import { promst } from "../../utils/prompts";
 
@@ -17,17 +21,40 @@ const GenerateDocumentation = () => {
   const [message, setMessage] = useState("");
   const [savedtext, setSavedText] = useState("");
 
+  // generation settings for the model
+  const generationConfig = {
+    //stopSequences: ["red"],
+    // maxOutputTokens: 200,
+    temperature: 0.9,
+    topP: 0.1,
+    topK: 16,
+  };
+
+  // safety settings for the model
+  const safetySettings = [
+    {
+      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    },
+  ];
+
   const fetchData = async () => {
-    if (!selectedDocumentType) {
-      setMessage("Please select a document type");
-    } else {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    if (!!selectedDocumentType) {
+      const model = genAI.getGenerativeModel({
+        model: "gemini-pro",
+        generationConfig,
+        safetySettings,
+      });
+
+      console.log("selectedDocumentType--- ", selectedDocumentType);
+      console.log("selectPromptMessage---- ", selectPromptMessage);
+
       const prompt = `
       Based on ${selectedDocumentType}. 
       Includind the following information: ${selectPromptMessage}.
       Could you please create a document that includes the following request: ${input}`;
 
-      console.log(prompt);
+      console.log("---- prompt --- ", prompt);
       const result = await model.generateContent(prompt);
       const response = await result.response;
       console.log(response);
@@ -37,6 +64,8 @@ const GenerateDocumentation = () => {
       setApiData(text.replace(/\n/g, "<br />"));
       setSavedText(text);
       setLoading(false);
+    } else {
+      setMessage("Please select a document type");
     }
   };
 
@@ -74,14 +103,15 @@ const GenerateDocumentation = () => {
   useEffect(() => {
     {
       if (selectedDocumentType !== "") {
+        console.log("selectedDocumentType --> ", selectedDocumentType);
         Object.keys(promst).map((key) => {
-          if (promst[key]?.message === event.target.value) {
+          if (promst[key]?.name === selectedDocumentType) {
             setSelectPromptMessage(promst[key]?.prompt);
           }
         });
       }
     }
-  }, [selectedDocumentType, selectPromptMessage]);
+  }, [selectedDocumentType]);
 
   const handleSave = () => {
     setMessage("Saved to User Manuals");

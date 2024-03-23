@@ -24,4 +24,4 @@ function calculateFactorial(num) {
 
 3. Generate System Architecture from High-level Specifications
 
-A text description of the project's purpose, major functionalities, and any constraints (e.g., "Build a scalable image processing platform that can handle large volumes of user uploads in real-time")
+A text description of the project's purpose, major functionalities, and any constraints to "Build a scalable image processing platform that can handle large volumes of user uploads in real-time"
