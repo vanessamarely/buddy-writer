@@ -1,5 +1,5 @@
-export const promst = {
-  technicalDocumentation: {
+export const promst = [
+  {
     id: "1",
     name: "Generate documentation",
     message: "I want to generate the technical documentation.",
@@ -10,7 +10,7 @@ export const promst = {
     The set of technical specifications should be the following: 
     `,
   },
-  userManual: {
+  {
     id: "2",
     name: "Generate an user manual",
     message: "I want to generate the user manual.",
@@ -19,7 +19,7 @@ export const promst = {
     For a code project, include a section on how to interact with the codebase, and how to run the project locally.
    The user-friendly manual will explain how to interact with and use the functionality based on the following: `,
   },
-  highLevelSpecifications: {
+  {
     id: "3",
     name: "Generate System Architecture from High-level Specifications",
     message:
@@ -29,4 +29,4 @@ export const promst = {
     The Architecture should has a visual diagram (e.g., UML component diagram, or a box-and-arrow style) depicting: major system components (frontend, backend, database, message queues, etc.), interactions and data flow between components and  textual explanations of technology choices and design reasoning.
     Based on the following set of technical specifications:`,
   },
-};
+];

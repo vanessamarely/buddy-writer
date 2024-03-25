@@ -60,7 +60,6 @@ const GenerateDocumentation = () => {
       console.log(response);
       const text = response.text() || "No response";
 
-      //setApiData(text.replace(/\n/g, "<br />"));
       setApiData(text.replace(/\n/g, "<br />"));
       setSavedText(text);
       setLoading(false);
@@ -90,26 +89,13 @@ const GenerateDocumentation = () => {
   };
 
   const handleDocumentType = (event) => {
-    console.log(event.target.value);
     setSelectedDocumentType(event.target.value);
   };
 
-  // const formatResponse = (text) => {
-  //   //text = text.replace(/### (.*)/g, "<h3>$1</h3>");
-  //   console.log(text);
-  //   return text.replace(/\n/g, "<br />");
-  // };
-
   useEffect(() => {
     {
-      if (selectedDocumentType !== "") {
-        console.log("selectedDocumentType --> ", selectedDocumentType);
-        Object.keys(promst).map((key) => {
-          if (promst[key]?.name === selectedDocumentType) {
-            setSelectPromptMessage(promst[key]?.prompt);
-          }
-        });
-      }
+      const selected = promst.find((item) => item.name === selectedDocumentType);
+      setSelectPromptMessage(selected?.prompt);
     }
   }, [selectedDocumentType]);
 
@@ -140,13 +126,13 @@ const GenerateDocumentation = () => {
           onChange={handleDocumentType}
         >
           <option value="">Selected a Document Type</option>
-          {Object.keys(promst).map((key) => {
-            return (
-              <option key={promst[key]?.id} value={promst[key]?.message}>
-                {promst[key]?.name}
+          {
+            promst?.map((item) => (
+              <option key={item?.id} value={item?.name}>
+                {item?.name}
               </option>
-            );
-          })}
+            ))
+          }
         </select>
       </div>
       <div className="generate-documentation__container-textarea">

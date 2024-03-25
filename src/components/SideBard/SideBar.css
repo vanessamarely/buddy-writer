@@ -52,6 +52,6 @@
     width: 100%;
 }
 
-.list-options-item:active, .list-options-item:hover {
+.list-options-item:active, .list-options-item:hover, .list-options-item.active {
     background-color: #233C77;
 }
